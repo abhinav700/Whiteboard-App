@@ -1,18 +1,11 @@
 "use client";
 import useDraw from "@/hooks/useDraw";
+import drawLine from "@/utilities/drawLine";
 import React, { useRef } from "react";
 
 const page = () => {
   const { canvasRef, handler,onClearCanvas} = useDraw(drawLine);
-  function drawLine({ ctx, prevPoint, currentPoint }: Draw) {
-    if (prevPoint) {
-      ctx!.beginPath();
-      ctx!.strokeStyle = "black";
-      ctx?.moveTo(prevPoint.x, prevPoint.y);
-      ctx?.lineTo(currentPoint.x, currentPoint.y);
-      ctx?.stroke();
-    }
-  }
+  
   return (
     <div className="flex flex-row justify-center items-center h-[600px]">
       <div className="flex flex-col justify-center items-center mx-4 w-[100px] ">

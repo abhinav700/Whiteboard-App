@@ -30,10 +30,9 @@ const useDraw = (onDraw: ({ ctx, prevPoint, currentPoint }: Draw) => void) => {
     }
   };
 
-  const onClearCanvas = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    console.log("Triggered clear canvas")
+  const onClearCanvas = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const ctx = canvasRef.current?.getContext("2d")!;
+    ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
   };
 
   function computeRelativeCoordinates(
