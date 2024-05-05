@@ -16,7 +16,6 @@ const useDraw = (onDraw: ({ ctx, prevPoint, currentPoint }: Draw) => void) => {
     const ctx = canvasRef.current?.getContext("2d")!;
     currentPoint.current = computeRelativeCoordinates(e);
 
-    console.log(isMouseDown);
     if (!currentPoint.current || !ctx) return;
 
     if (isMouseDown) {
