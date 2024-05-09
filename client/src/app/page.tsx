@@ -3,34 +3,23 @@ import useDraw from "@/hooks/useDraw";
 import React, { useRef, useState } from "react";
 import { Wheel } from "@uiw/react-color";
 import LineWidth from "@/Components/LineWidth";
+import { drawLine } from "@/utils/utils";
+
 
 const page = () => {
-  const { canvasRef, handler, onClearCanvas } = useDraw(drawLine);
+  const [hex, setHex] = useState("#fff");
   const [lineWidth, setLineWidth] = useState(1);
+  const { canvasRef, handler, onClearCanvas } = useDraw(drawLine, hex, lineWidth);
 
   const onDecrease = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     setLineWidth((lineWidth) => Math.max(1, lineWidth - 1));
   };
   const onIncrease = (e: any) => {
     setLineWidth((lineWidth) => Math.min(20, lineWidth + 1));
-
+    
   };
-  const [hex, setHex] = useState("#fff");
 
-  function drawLine({ ctx, prevPoint, currentPoint }: Draw) {
-    if (prevPoint) {
-      ctx!.beginPath();
-      ctx!.strokeStyle = hex;
-      ctx!.lineWidth = lineWidth+7;
-      ctx?.moveTo(prevPoint.x, prevPoint.y);
-      ctx?.lineTo(currentPoint.x, currentPoint.y);
-      ctx?.stroke();
-
-      ctx?.beginPath();  
-      ctx?.arc(currentPoint.x, currentPoint.y, lineWidth, 0, Math.PI * 2);
-      ctx?.stroke()
-    }
-  }
+ 
   return (
     <div className="flex flex-row justify-center items-center h-[600px]">
       <div className="flex flex-col justify-center items-center mx-4 w-[300px] h-[600px]">
