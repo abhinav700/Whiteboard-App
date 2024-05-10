@@ -1,15 +1,19 @@
 "use client";
 import useDraw from "@/hooks/useDraw";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Wheel } from "@uiw/react-color";
 import LineWidth from "@/Components/LineWidth";
 import { drawLine } from "@/utils/utils";
+import { Socket } from "socket.io-client";
 
+const { io } = require("socket.io-client");
+const socket:Socket = io("ws://localhost:8080")
 
 const page = () => {
-  const [hex, setHex] = useState("#fff");
-  const [lineWidth, setLineWidth] = useState(1);
-  const { canvasRef, handler, onClearCanvas } = useDraw(drawLine, hex, lineWidth);
+
+  const [hex, setHex] = useState<string>("#fff");
+  const [lineWidth, setLineWidth] = useState<number>(1);
+  const { canvasRef, handler, onClearCanvas } = useDraw(createLine, hex, lineWidth);
 
   const onDecrease = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     setLineWidth((lineWidth) => Math.max(1, lineWidth - 1));
@@ -18,8 +22,18 @@ const page = () => {
     setLineWidth((lineWidth) => Math.min(20, lineWidth + 1));
     
   };
+  
+ function createLine({ctx, prevPoint, currentPoint, hex, lineWidth }: Draw){
+    socket.emit("draw-line",{prevPoint, currentPoint, hex,lineWidth});
+    drawLine({ctx,prevPoint, currentPoint, hex, lineWidth});
+    
+ }
 
- 
+ socket.on("draw-line",({prevPoint, currentPoint, hex, lineWidth})=>{
+  const ctx = canvasRef.current?.getContext("2d")!;
+  console.log({prevPoint, currentPoint, hex, lineWidth})
+  drawLine({ctx,prevPoint,currentPoint, hex, lineWidth});
+ }) 
   return (
     <div className="flex flex-row justify-center items-center h-[600px]">
       <div className="flex flex-col justify-center items-center mx-4 w-[300px] h-[600px]">

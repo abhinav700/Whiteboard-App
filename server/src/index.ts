@@ -10,6 +10,12 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket: Socket) => {
   socket.emit("Hello from server");
+  console.log("Connected  ")
+  socket.on("draw-line",({ prevPoint, currentPoint, hex, lineWidth }: DrawLineEventProps) => {
+      console.log({prevPoint, currentPoint})
+      socket.broadcast.emit("draw-line", {prevPoint,currentPoint,hex,lineWidth});
+    }
+  );
 });
 
 server.listen(8080, () => {

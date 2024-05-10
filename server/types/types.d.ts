@@ -5,11 +5,10 @@ type Point = {
 
 type Draw = {
     ctx:  CanvasRenderingContext2D | null,
-    prevPoint : Point | null,
-    currentPoint: Point,
-    hex:string,
-    lineWidth:number
+    prevPoint : Point,
+    currentPoint: Point
 }
+
 type DrawLineEventProps = {
     prevPoint:Point | null,
     currentPoint: Point,
