@@ -11,8 +11,10 @@ io.on("connection", (socket) => {
     socket.emit("Hello from server");
     console.log("Connected  ");
     socket.on("draw-line", ({ prevPoint, currentPoint, hex, lineWidth }) => {
-        console.log({ prevPoint, currentPoint });
         socket.broadcast.emit("draw-line", { prevPoint, currentPoint, hex, lineWidth });
+    });
+    socket.on("clear-canvas", () => {
+        socket.broadcast.emit("clear-canvas");
     });
 });
 server.listen(8080, () => {

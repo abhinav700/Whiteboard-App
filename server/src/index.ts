@@ -12,10 +12,12 @@ io.on("connection", (socket: Socket) => {
   socket.emit("Hello from server");
   console.log("Connected  ")
   socket.on("draw-line",({ prevPoint, currentPoint, hex, lineWidth }: DrawLineEventProps) => {
-      console.log({prevPoint, currentPoint})
       socket.broadcast.emit("draw-line", {prevPoint,currentPoint,hex,lineWidth});
     }
   );
+  socket.on("clear-canvas", ()=>{
+    socket.broadcast.emit("clear-canvas");
+  })
 });
 
 server.listen(8080, () => {

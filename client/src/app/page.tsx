@@ -13,8 +13,12 @@ const page = () => {
 
   const [hex, setHex] = useState<string>("#fff");
   const [lineWidth, setLineWidth] = useState<number>(1);
-  const { canvasRef, handler, onClearCanvas } = useDraw(createLine, hex, lineWidth);
+  const { canvasRef, handler, clearCanvas } = useDraw(createLine, hex, lineWidth);
 
+  const onClickClearCanvas = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
+    socket.emit("clear-canvas");
+    clearCanvas()
+  }   
   const onDecrease = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     setLineWidth((lineWidth) => Math.max(1, lineWidth - 1));
   };
@@ -31,9 +35,10 @@ const page = () => {
 
  socket.on("draw-line",({prevPoint, currentPoint, hex, lineWidth})=>{
   const ctx = canvasRef.current?.getContext("2d")!;
-  console.log({prevPoint, currentPoint, hex, lineWidth})
   drawLine({ctx,prevPoint,currentPoint, hex, lineWidth});
  }) 
+
+ socket.on("clear-canvas",()=> clearCanvas())
   return (
     <div className="flex flex-row justify-center items-center h-[600px]">
       <div className="flex flex-col justify-center items-center mx-4 w-[300px] h-[600px]">
@@ -51,7 +56,7 @@ const page = () => {
         />
         <button
           type="button"
-          onClick={onClearCanvas}
+          onClick={onClickClearCanvas}
           className="bg-white text-black rounded-full px-4 py-2 my-3 shadow-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-400"
         >
           Clear Canvas

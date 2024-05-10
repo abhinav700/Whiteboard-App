@@ -15,7 +15,6 @@ const useDraw = (
     prevPoint.current = null;
     setIsMouseDown((isMouseDown) => false);
   };
-  console.log("RERENDERING USE DRAW")
   const handler = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const ctx = canvasRef.current?.getContext("2d")!;
     currentPoint.current = computeRelativePoint(e);
@@ -35,9 +34,7 @@ const useDraw = (
     }
   };
 
-  const onClearCanvas = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const clearCanvas = () => {
     const ctx = canvasRef.current?.getContext("2d")!;
     ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
   };
@@ -65,6 +62,6 @@ const useDraw = (
     };
   }, [onDraw]);
 
-  return { canvasRef, handler, onClearCanvas };
+  return { canvasRef, handler, clearCanvas };
 };
 export default useDraw;
