@@ -32,13 +32,27 @@ const page = () => {
     drawLine({ctx,prevPoint, currentPoint, hex, lineWidth});
     
  }
+useEffect(()=>{
+  socket.on("draw-line",({prevPoint, currentPoint, hex, lineWidth})=>{
+    const ctx = canvasRef.current?.getContext("2d")!;
+    drawLine({ctx,prevPoint,currentPoint, hex, lineWidth});
+   }) 
+  
+   socket.on("clear-canvas",()=> clearCanvas())
 
- socket.on("draw-line",({prevPoint, currentPoint, hex, lineWidth})=>{
-  const ctx = canvasRef.current?.getContext("2d")!;
-  drawLine({ctx,prevPoint,currentPoint, hex, lineWidth});
- }) 
+   socket.on("new-client-joined",()=>{
+      const drawingDataUrl : string | null= canvasRef.current?.toDataURL()!;
 
- socket.on("clear-canvas",()=> clearCanvas())
+      socket.emit("state-from-client",drawingDataUrl);
+   })
+   socket.on("state-from-server", (drawingDataUrl:string)=>{
+      const image = new Image();
+      image.src= drawingDataUrl;
+      const ctx = canvasRef.current?.getContext("2d");
+      ctx?.drawImage(image,0,0);
+   })
+},[])
+ 
   return (
     <div className="flex flex-row justify-center items-center h-[600px]">
       <div className="flex flex-col justify-center items-center mx-4 w-[300px] h-[600px]">

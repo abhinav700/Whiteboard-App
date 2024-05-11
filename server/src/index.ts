@@ -9,14 +9,17 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket: Socket) => {
-  socket.emit("Hello from server");
-  console.log("Connected  ")
+  io.emit("new-client-joined");
   socket.on("draw-line",({ prevPoint, currentPoint, hex, lineWidth }: DrawLineEventProps) => {
       socket.broadcast.emit("draw-line", {prevPoint,currentPoint,hex,lineWidth});
     }
   );
   socket.on("clear-canvas", ()=>{
-    socket.broadcast.emit("clear-canvas");
+    socket.emit("clear-canvas");
+  })
+
+  socket.on("state-from-client",(drawingDataUrl:string) => {
+      socket.broadcast.emit("state-from-server",drawingDataUrl);
   })
 });
 
